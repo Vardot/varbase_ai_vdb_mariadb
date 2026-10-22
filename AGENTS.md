@@ -2,28 +2,26 @@
 
 Guidance for AI coding agents working on the Varbase AI VDB: MariaDB recipe.
 
-This is a **private** recipe on GitHub (`Vardot/varbase_ai_vdb_mariadb`), not a drupal.org project. Issues,
-pull requests and CI all live on GitHub.
+This is a drupal.org project: [drupal.org/project/varbase_ai_vdb_mariadb](https://www.drupal.org/project/varbase_ai_vdb_mariadb).
+Issues live in its [issue queue](https://www.drupal.org/project/issues/varbase_ai_vdb_mariadb) and merge requests on
+[git.drupalcode.org](https://git.drupalcode.org/project/varbase_ai_vdb_mariadb). Its default branch is `1.0.x`; the
+GitHub repository is a mirror and takes no issues or pull requests.
 
 ## Before you start
 
 - **`CHANGELOG.md`**: what changed in each release, newest first. Read it before proposing a change.
-- **Pull requests and their discussions** on
-  [github.com/Vardot/varbase_ai_vdb_mariadb](https://github.com/Vardot/varbase_ai_vdb_mariadb/pulls): the
-  reasoning behind recent changes.
-- **Issues** on [github.com/Vardot/varbase_ai_vdb_mariadb/issues](https://github.com/Vardot/varbase_ai_vdb_mariadb/issues):
-  the Problem/Motivation and Proposed resolution for each change.
+- **Issues and merge requests** on drupal.org: the Problem/Motivation, Proposed resolution and the reasoning
+  behind recent changes.
 - **`README.md`**: what was checked, what was not, and the known issues in the provider.
 
 ## When you make a change
 
-- One issue and one pull request per change. The PR says `Closes #<issue>` and ends with the Checkpoints list
-  from `.github/pull_request_template.md`.
+- One drupal.org issue and one issue-fork merge request per change, titled `<type>: #<issue> Summary`. The MR
+  description ends with the Checkpoints list from `.gitlab/merge_request_templates/default.md`.
+- CI must be green before merging: `.gitlab-ci.yml` on git.drupalcode.org validates `composer.json` and lints
+  every YAML file.
+- No PHP in the repository at all: no `.php`, `.module`, `.install` or `.inc` file.
 - Add an entry under `## [Unreleased]` in `CHANGELOG.md`.
-- CI must be green before merging: `.github/workflows/ci.yml` lints the repository, then applies the recipe on
-  a real Drupal 11.4 site with MariaDB 11.8, applies it again and runs the no-key recipe check.
-- No PHP in the repository at all: no `.php`, `.module`, `.install` or `.inc` file. The no-key checks run inline in
-  `.github/workflows/ci.yml` (`drush php:eval`), and the lint job fails on any PHP file.
 - Never store a password or token in configuration. A separate server is configured in `settings.php` from
   environment variables.
 - Never bump the version or tag a release without explicit maintainer approval. Tags are three-segment

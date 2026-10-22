@@ -1,15 +1,14 @@
 [![Varbase](https://raw.githubusercontent.com/Vardot/varbase/11.0.x/images/varbase-logo.png)](https://www.drupal.org/project/varbase)
 
 # Varbase AI VDB: MariaDB
-[![CI](https://github.com/Vardot/varbase_ai_vdb_mariadb/actions/workflows/ci.yml/badge.svg?branch=1.0.x)](https://github.com/Vardot/varbase_ai_vdb_mariadb/actions/workflows/ci.yml)
-[![Varbase AI VDB: MariaDB](https://img.shields.io/badge/Varbase%20AI%20VDB%3A%20MariaDB-1.0.2-0d6efc?labelColor=001d38&style=flat-square)](https://github.com/Vardot/varbase_ai_vdb_mariadb/releases/tag/1.0.2)
+[![Varbase AI VDB: MariaDB](https://img.shields.io/badge/Varbase%20AI%20VDB%3A%20MariaDB-1.0.x--dev-0d6efc?labelColor=001d38&style=flat-square)](https://www.drupal.org/project/varbase_ai_vdb_mariadb)
 
-A private Drupal recipe that uses MariaDB's native `VECTOR` type as the vector database for AI Search on a
+A Drupal recipe that uses MariaDB's native `VECTOR` type as the vector database for AI Search on a
 Varbase 11 site. The vectors live in the **site's own database**, with no extra service, or on a **separate
 MariaDB server**.
 
-It is one of three interchangeable vector database recipes for [Varbase AI Search](https://github.com/Vardot/varbase_ai_search_base).
-The others are [Milvus](https://github.com/Vardot/varbase_ai_vdb_milvus) and [SQLite](https://github.com/Vardot/varbase_ai_vdb_sqlite).
+It is one of three interchangeable vector database recipes for [Varbase AI Search](https://www.drupal.org/project/varbase_ai_search_base).
+The other is [Milvus](https://www.drupal.org/project/varbase_ai_vdb_milvus).
 MariaDB is the only one with a **stable** provider release.
 
 There is **no custom PHP and no custom shell code** in the recipe. Its no-key checks run inline in CI, so the repository holds no PHP file at
@@ -23,7 +22,7 @@ all.
 | Provider settings | Sets `use_drupal_database` to true. A separate server set in `settings.php` still wins over it. |
 
 It does **not** create a Search API server or index. That needs an embeddings model and belongs to
-[Varbase AI Search](https://github.com/Vardot/varbase_ai_search_base).
+[Varbase AI Search](https://www.drupal.org/project/varbase_ai_search_base).
 
 ## Requirements
 
@@ -37,11 +36,9 @@ It does **not** create a Search API server or index. That needs an embeddings mo
 ## Install and apply
 
 ```bash
-# 1. Fetch the recipe. The repository is private, so Composer clones it over SSH.
-ddev auth ssh
-ddev composer config repositories.varbase_ai_vdb_mariadb vcs git@github.com:Vardot/varbase_ai_vdb_mariadb.git
-ddev composer config --json extra.drupal-recipe-unpack.ignore '["vardot/varbase_ai_vdb_mariadb"]'
-ddev composer require vardot/varbase_ai_vdb_mariadb:~1.0.2 --prefer-source
+# 1. Fetch the recipe.
+ddev composer config --json extra.drupal-recipe-unpack.ignore '["drupal/varbase_ai_vdb_mariadb"]'
+ddev composer require drupal/varbase_ai_vdb_mariadb:1.0.x-dev
 
 # 2. Apply it. Rebuild caches before and after: Drupal does not see the new module or its plugin until it does.
 ddev drush cr
@@ -52,11 +49,9 @@ ddev drush cr
 #    amazee.io default of Drupal CMS AI. Only 1.0.2 and earlier need this line.
 ddev drush cset ai.settings default_vdb_provider mariadb -y
 
-# 4. Check it. No AI key is needed.
-ddev drush php:eval "$(sed -n "/<<'PHP'/,/^ *PHP\$/p" recipes/varbase_ai_vdb_mariadb/.github/workflows/ci.yml | sed '1d;$d')"
 ```
 
-Use `1.0.x-dev` instead of `~1.0.2` to follow the development branch. The ignore line keeps the recipe a locked
+The ignore line keeps the recipe a locked
 package: without it core's recipe-unpack plugin moves its requirements into the project's `composer.json` and
 drops the recipe itself. Re-applying the recipe is safe.
 
@@ -106,8 +101,6 @@ Use this when the vectors should not share the site's database, for example for 
 3. Apply the recipe as above, then check it with the database name as the last argument:
 
    ```bash
-   ddev drush php:eval "$(sed -n "/<<'PHP'/,/^ *PHP\$/p" recipes/varbase_ai_vdb_mariadb/.github/workflows/ci.yml | sed '1d;$d' \
-     | sed "s/^ *\$extra = .*/\$extra = ['mariadb', '<database>'];/")"
    ```
 
 Before choosing this:
@@ -126,21 +119,13 @@ relying on it. Below 11.7 the Status report shows the vector line as an error, a
 
 ## Automated testing
 
-`.github/workflows/ci.yml` runs on every pull request, every push to `1.0.x` and every tag:
+GitLab CI on [git.drupalcode.org](https://git.drupalcode.org/project/varbase_ai_vdb_mariadb) (`.gitlab-ci.yml`) runs on every merge
+request and every push to `1.0.x`, like the other Varbase AI recipes: `composer validate` and a lint of every YAML
+file.
 
-1. **Lint**: `composer validate`, every YAML file, and PHP syntax.
-2. **Apply on Drupal 11.4 and MariaDB 11.8**: a fresh `drupal/recommended-project` site requires this checkout,
-   installs on a MariaDB 11.8 service, applies the recipe, applies it again, and runs the no-key recipe check.
-3. **Functional tests**: the same job then serves the site and runs the Playwright + Cucumber scenarios in
-   `tests/features` through [`@vardot/varbase-e2e`](https://www.npmjs.com/package/@vardot/varbase-e2e) in
-   Chromium. The Webmaster provisions the testing users first, then the scenarios check the admin pages the
-   recipe adds, every page for PHP errors, and that a visitor without the permission is kept out. Screenshots
-   and reports of a failed run are kept as the `functional-tests` artifact. To run them against a site of
-   your own: `yarn install`, then `LAUNCH_URL=https://your-site.ddev.site yarn test`.
-
-The CI step "Check the recipe without an AI key" (an inline `drush php:eval` in `.github/workflows/ci.yml`) needs no AI key. It pings the provider, creates a collection with a `VECTOR` column, inserts
-three vectors, checks that a search ranks them in the right order, and drops the collection. It creates and
-drops a throw-away collection called `vdb_verify_mariadb` in the database it connects to.
+The functional tests in `tests/features` (Playwright and Cucumber through
+[`@vardot/varbase-e2e`](https://www.npmjs.com/package/@vardot/varbase-e2e)) run against a site of your own:
+`yarn install`, then `LAUNCH_URL=https://your-site.ddev.site yarn test`.
 
 ## Checked
 
@@ -175,11 +160,10 @@ content, which needs an embeddings provider key.
 
 | Recipe | What it does |
 |---|---|
-| [Varbase AI Search](https://github.com/Vardot/varbase_ai_search_base) | The vector index of the site's content, on the default vector database. |
-| [Varbase AI Answers](https://github.com/Vardot/varbase_ai_answers_base) | Ask AI: cited answers over that index. |
-| [Varbase AI Chatbot Base](https://github.com/Vardot/varbase_ai_chatbot_base) | A visitor chatbot over that index. |
-| [Varbase AI VDB: Milvus](https://github.com/Vardot/varbase_ai_vdb_milvus) | Milvus or Zilliz Cloud as the vector database. |
-| [Varbase AI VDB: SQLite](https://github.com/Vardot/varbase_ai_vdb_sqlite) | SQLite with sqlite-vec as the vector database. |
+| [Varbase AI Search](https://www.drupal.org/project/varbase_ai_search_base) | The vector index of the site's content, on the default vector database. |
+| [Varbase AI Answers](https://www.drupal.org/project/varbase_ai_answers_base) | Ask AI: cited answers over that index. |
+| [Varbase AI Chatbot Base](https://www.drupal.org/project/varbase_ai_chatbot_base) | A visitor chatbot over that index. |
+| [Varbase AI VDB: Milvus](https://www.drupal.org/project/varbase_ai_vdb_milvus) | Milvus or Zilliz Cloud as the vector database. |
 
 ## License
 

@@ -14,7 +14,7 @@
         "RAG"
     ],
     "license": "GPL-2.0-or-later",
-    "homepage": "https://github.com/Vardot/varbase_ai_vdb_mariadb",
+    "homepage": "https://www.drupal.org/project/varbase_ai_vdb_mariadb",
     "authors": [
         {
             "name": "Vardot",
@@ -23,8 +23,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/Vardot/varbase_ai_vdb_mariadb/issues",
-        "source": "https://github.com/Vardot/varbase_ai_vdb_mariadb"
+        "issues": "https://www.drupal.org/project/issues/varbase_ai_vdb_mariadb",
+        "source": "https://git.drupalcode.org/project/varbase_ai_vdb_mariadb"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
