@@ -1,0 +1,22 @@
+name: 'Varbase AI VDB: MariaDB'
+type: Varbase AI
+description: 'Uses MariaDB as the vector database for AI Search, in the site''s own database, with no extra service. Installs the MariaDB VDB provider and keeps it on the Drupal database connection. Needs MariaDB 11.7 or later for the VECTOR type: DDEV with MariaDB 11.8 qualifies, and the Varbase Upsun template (MariaDB 10.11) does not until its database service is upgraded. To use a separate MariaDB server, set $config in settings.php. No custom PHP or shell code.'
+
+install:
+  - ai
+  - ai_search
+  - ai_vdb_provider_mariadb
+
+config:
+  # Re-applying this recipe must be safe: install what is not there yet and leave the rest.
+  strict: false
+  actions:
+    # The module already installs with this on. It is stated here so that the recipe does not
+    # depend on the module's default. A separate server set in settings.php still wins over it.
+    ai_vdb_provider_mariadb.settings:
+      simpleConfigUpdate:
+        use_drupal_database: true
+    # The site's default vector database, which Varbase AI Search reads. Drupal CMS AI sets amazee.io.
+    ai.settings:
+      simpleConfigUpdate:
+        default_vdb_provider: mariadb

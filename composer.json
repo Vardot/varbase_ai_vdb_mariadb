@@ -1,0 +1,37 @@
+{
+    "name": "drupal/varbase_ai_vdb_mariadb",
+    "description": "Uses MariaDB 11.7 or later as the vector database for Varbase AI Search, in the site's own database or on a separate MariaDB server, with no extra service. No custom PHP or shell code.",
+    "type": "drupal-recipe",
+    "keywords": [
+        "recipe",
+        "Varbase recipes",
+        "Drupal recipes",
+        "Varbase AI",
+        "Drupal AI",
+        "AI Search",
+        "vector database",
+        "MariaDB",
+        "RAG"
+    ],
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://github.com/Vardot/varbase_ai_vdb_mariadb",
+    "authors": [
+        {
+            "name": "Vardot",
+            "homepage": "https://www.vardot.com",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/Vardot/varbase_ai_vdb_mariadb/issues",
+        "source": "https://github.com/Vardot/varbase_ai_vdb_mariadb"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "drupal/ai": "^1.4",
+        "drupal/ai_vdb_provider_mariadb": "^1.0",
+        "drupal/core": "^11.4",
+        "drupal/search_api": "^1.40"
+    }
+}
