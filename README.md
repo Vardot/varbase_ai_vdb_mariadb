@@ -1,7 +1,7 @@
 [![Varbase](https://raw.githubusercontent.com/Vardot/varbase/11.0.x/images/varbase-logo.png)](https://www.drupal.org/project/varbase)
 
 # Varbase AI VDB: MariaDB
-[![Varbase AI VDB: MariaDB](https://img.shields.io/badge/Varbase%20AI%20VDB%3A%20MariaDB-1.0.x--dev-0d6efc?labelColor=001d38&style=flat-square)](https://www.drupal.org/project/varbase_ai_vdb_mariadb)
+[![Varbase AI VDB: MariaDB](https://img.shields.io/badge/Varbase%20AI%20VDB%3A%20MariaDB-1.0.0--alpha1-0d6efc?labelColor=001d38&style=flat-square)](https://www.drupal.org/project/varbase_ai_vdb_mariadb)
 
 A Drupal recipe that uses MariaDB's native `VECTOR` type as the vector database for AI Search on a
 Varbase 11 site. The vectors live in the **site's own database**, with no extra service, or on a **separate

@@ -21,6 +21,7 @@ GitHub repository is a mirror and takes no issues or pull requests.
 - CI must be green before merging: `.gitlab-ci.yml` on git.drupalcode.org validates `composer.json` and lints
   every YAML file.
 - No PHP in the repository at all: no `.php`, `.module`, `.install` or `.inc` file.
+- All configuration lives in `recipe.yml` and the recipe's own `config/`, never in `config/install` or `config/optional`.
 - Add an entry under `## [Unreleased]` in `CHANGELOG.md`.
 - Never store a password or token in configuration. A separate server is configured in `settings.php` from
   environment variables.
