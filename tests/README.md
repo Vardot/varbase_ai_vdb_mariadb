@@ -5,10 +5,9 @@ Varbase 11 site with this recipe applied.
 
 | Feature | Covers |
 | --- | --- |
-| `01-01-ai-vdb-mariadb-provider.feature` | The MariaDB provider on the site's own database, made the default vector database, and the status report check |
-| `01-02-ai-vdb-mariadb-access.feature` | Only the webmaster sees the vector database settings |
-
-The default provider choice are named selectors in `tests/selectors/ai-vdb-mariadb-selectors.json`.
+| `01-01-ai-vdb-mariadb-provider.feature` | The webmaster sees the site's own database is ready to store vectors, on the provider page and the status report |
+| `01-02-ai-vdb-mariadb-access.feature` | Only the webmaster sees the database connection |
+| `01-03-ai-vdb-mariadb-accessibility.feature` | The provider page gives every field a label and every link a name |
 
 ## Run it
 
@@ -23,4 +22,8 @@ The site needs the webmaster (`webmaster`) and one user per role, named after th
 
 ## AI provider
 
-The suite needs no AI provider and no key.
+CI applies Drupal CMS AI before the recipe. It sets up an amazee.ai trial as the default provider, so no key
+is needed. CI runs MariaDB 11.8, which supports vectors.
+
+The provider page is held to the field label, link name and ARIA role checks rather than the full serious gate: its credit links
+are smaller than the target size, which comes from the provider module, not this recipe.
