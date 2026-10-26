@@ -1,0 +1,6 @@
+{
+  "css": {
+    "MariaDB as the default vector database": "#edit-vdb-table-vdb-provider-default-vdb-provider option:checked:has-text('MariaDB vector DB')",
+    "AI settings": "body"
+  }
+}
