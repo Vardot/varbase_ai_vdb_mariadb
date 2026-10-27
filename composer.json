@@ -2,7 +2,7 @@
     "name": "drupal/varbase_ai_vdb_mariadb",
     "description": "Uses MariaDB 11.7 or later as the vector database for Varbase AI Search, in the site's own database or on a separate MariaDB server, with no extra service. No custom PHP or shell code.",
     "type": "drupal-recipe",
-    "version": "1.0.x-dev",
+    "version": "1.0.0-beta1",
     "keywords": [
         "recipe",
         "Varbase recipes",
