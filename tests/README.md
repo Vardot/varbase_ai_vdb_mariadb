@@ -25,5 +25,10 @@ The site needs the webmaster (`webmaster`) and one user per role, named after th
 CI applies Drupal CMS AI before the recipe. It sets up an amazee.ai trial as the default provider, so no key
 is needed. CI runs MariaDB 11.8, which supports vectors.
 
+When amazee.ai cannot be reached, `tests/scripts/ai-provider.sh` sets the AI module's Echo test provider
+instead, prints "amazee.ai unavailable: running with the Echo test provider" and exports `AI_PROVIDER=echoai`.
+The suite checks the provider page and its access, not stored vectors, so every scenario still runs. A scenario
+that needs a real model's reply is tagged `@live-ai` and skipped in that mode. `AMAZEE_UNREACHABLE=1` forces it.
+
 The provider page is held to the field label, link name and ARIA role checks rather than the full serious gate: its credit links
 are smaller than the target size, which comes from the provider module, not this recipe.
